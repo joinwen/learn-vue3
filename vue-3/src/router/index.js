@@ -5,6 +5,16 @@ const routes = [
     name: "Test",
     component: () => import("@/views/test/Test")
   },
+  {
+    path: "/api/reactive",
+    name: "ReactiveApiTest",
+    component: () => import("@/views/api/reactive-api/ReactiveApiTest")
+  },
+  {
+    path: "/api/reactive2",
+    name: "RefsApiTest",
+    component: () => import("@/views/api/reactive-api/RefsApiTest")
+  }
 ];
 
 const router = createRouter({
