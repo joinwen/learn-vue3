@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Leaflet Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin=""></script>
+  <style>
+    #map {
+      height: 500px;
+      width: 800px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map">
+
+  </div>
+<script>
+  var map = L.map('map').setView([0, 0], 2);
+  var shopPosition = L.latLng(31.21230, 121.46484);
+  var marker = null,
+    shopMarker = null,
+    geoLine = null,
+    popup = null;
+
+  var greenIcon = L.icon({
+    iconUrl: 'shop-icon.png',
+
+    iconSize:     [38, 95], // size of the icon
+    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    shadowAnchor: [4, 62],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+  });
+
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery 漏 <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1
+  }).addTo(map);
+  shopMarker = L.marker([31.21230, 121.46484],{icon: greenIcon}).addTo(map);
+
+  map.on("click", (e) => {
+    marker && marker.remove();
+    popup = L.popup().setLatLng(e.latlng)
+      .setContent(`<p class="copy-text">You clicked at ${e.latlng.lng.toFixed(5)}, ${e.latlng.lat.toFixed(5)}</p>`)
+      .openOn(map);
+    marker = L.marker([e.latlng["lat"], e.latlng["lng"]]).addTo(map);
+    distance = shopPosition.distanceTo(L.latLng(e.latlng["lat"],e.latlng["lng"]));
+    alert("距离冰激凌店铺" + distance + "米");
+  })
+</script>
+</body>
+</html>
