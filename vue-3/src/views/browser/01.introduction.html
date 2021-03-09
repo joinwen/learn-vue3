@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>基础</title>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+<div class="wrapper">
+  <div class="">
+    <h2>生命式渲染：</h2>
+    <div id="id1">
+      Counter: {{ counter }}
+    </div>
+  </div>
+
+  <div class="">
+    <h2>Attribute 绑定：</h2>
+    <div id="id2">
+      <span :title="message">Attribute title</span>
+    </div>
+  </div>
+
+  <div class="">
+    <h2>处理用户输入：</h2>
+    <div id="id3">
+      <input type="text" v-model="theValue">
+      <span>{{ theValue }}</span>
+    </div>
+  </div>
+
+  <div class="">
+    <h2>条件与循环：</h2>
+    <div id="id4">
+      <template v-for="(item, index) in items" :key="item">
+        <todo-item v-if="selected == index" :index="item"></todo-item>
+      </template>
+      <button @click="() => this.selected = (++this.selected) % 4 ">{{ selected }}</button>
+    </div>
+  </div>
+</div>
+<script>
+  const Counter = {
+    data() {
+      return {
+        counter: 20
+      }
+    },
+    mounted() {
+      setInterval(() => {
+        this.counter ++ ;
+      },2000)
+    }
+  }
+  Vue.createApp(Counter).mount("#id1");
+
+  const AttributeBinding = {
+    data() {
+      return {
+        message: "You loaded this page on " + new Date().toLocaleTimeString()
+      }
+    }
+  }
+  Vue.createApp(AttributeBinding).mount("#id2");
+
+  const InputBinding = {
+    data() {
+      return {
+        theValue: "hello flywen"
+      }
+    }
+  }
+  Vue.createApp(InputBinding).mount("#id3");
+
+  let app = Vue.createApp({
+    data() {
+      return {
+        items: ["a", "b", "c", "d"],
+        selected: 0
+      }
+    }
+  });
+  const Item = {
+    props: ["index"],
+    data() {
+      return {
+        name: "item"
+      }
+    },
+    template: `<li>{{ index }}</li>`,
+    mounted() {
+      console.log(this.index);
+    }
+  };
+
+  app.component("todo-item", Item);
+  app.mount("#id4");
+</script>
+</body>
+</html>

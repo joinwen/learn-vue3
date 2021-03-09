@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>应用 & 组件实例</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>创建一个应用实例：</h2>
+    <div id="id1">
+      <search-input value="请输入一些闲言的内容"></search-input>
+    </div>
+
+  </div>
+
+  <div class="wrapper">
+    <h2>根组件：</h2>
+    <div id="id2">
+
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <h2>组件实例 property：</h2>
+    <div id="id3">
+
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <h2>生命周期钩子：</h2>
+    <div id="id4">
+
+    </div>
+  </div>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          name: "App"
+        }
+      }
+    }).component("SearchInput",{
+      template: `<input v-model="" :placeholder="value"></input>`,
+      props: ["value"]
+    });
+    app.mount("#id1");
+
+
+    const app2 = Vue.createApp({
+      template: `<button @click="() => index ++">{{ index }}</button>`,
+      data() {
+        return {
+          index: 1
+        }
+      }
+    });
+    app2.mount("#id2");
+
+
+    const app3 = Vue.createApp({
+      template: `<button>{{ index }}</button>`,
+      data() {
+        return {
+          index: 1
+        }
+      }
+    })
+    let vm3 = app3.mount("#id3");
+    setTimeout(() => {
+      vm3.$data.index = 100;
+    },2000);
+
+
+    const app4 = Vue.createApp({
+      template: `<button @click="() => index++">{{ index }}</button>`,
+      data() {
+        return {
+          index: 1
+        }
+      },
+      beforeCreate() {
+        console.log("1.---before create", this.index);
+      },
+      created() {
+        console.log("2.---created", this.index);
+      },
+      beforeMount() {
+        console.log("3.---beforeMount", this.index);
+      },
+      mounted() {
+        console.log("4.---mounted", this.index);
+      },
+      beforeUpdate() {
+        console.log("5.---beforeUpdate", this.index);
+      }
+    });
+    app4.mount("#id4");
+  </script>
+</body>
+</html>
