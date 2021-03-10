@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>模板语法</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>插值：</h2>
+  <div id="id1">
+    <span>{{ text }}</span>
+    <div v-html="html"></div>
+    <input type="text" :placeholder="attribute">
+  </div>
+
+</div>
+
+<div class="wrapper">
+  <h2>指令：</h2>
+  <div id="id2">
+
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>缩写：</h2>
+  <div id="id3">
+
+  </div>
+</div>
+<script>
+  let app1 = Vue.createApp({
+    data() {
+      return {
+        text: "原始文本",
+        html: "<h2>二级标题</h2>>",
+        attribute: "属性",
+      }
+    }
+  })
+  app1.mount("#id1");
+</script>
+</body>
+</html>

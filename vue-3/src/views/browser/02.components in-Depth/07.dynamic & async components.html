@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>动态组件 & 异步组件</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+    .wrapper {
+      padding: 1em;
+      margin: 1em;
+      border: 1px dashed yellowgreen;
+    }
+    .active {
+      border: 1px solid yellowgreen;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>动态组件：</h2>
+  <div id="id1">
+    <template v-for="(tab,index) in tabs" :key="index">
+      <button :class="[currentIndex == index && 'active']" @click="() => currentIndex = index">{{ tab }}</button>
+    </template>
+    <component :is="currentComponent"></component>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>动态组件使用 keep-alive：</h2>
+  <div id="id2">
+    <template v-for="(tab,index) in tabs" :key="index">
+      <button :class="[currentIndex == index && 'active']" @click="() => currentIndex = index">{{ tab }}</button>
+    </template>
+    <keep-alive>
+      <component :is="currentComponent"></component>
+    </keep-alive>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>异步组件：</h2>
+  <div id="id3">
+    <async-button></async-button>
+  </div>
+</div>
+
+<script>
+  let app1 = Vue.createApp({
+    data() {
+      return {
+        tabs: ["home","user","chart"],
+        currentIndex: 0
+      }
+    },
+    computed: {
+      currentComponent() {
+        let tabName = this.tabs[this.currentIndex];
+        return "tab-" + tabName;
+      }
+    }
+  }).component("TabHome", {
+    template: `<h3>tab home</h3>`,
+    mounted() {
+      console.log("app1 tab home");
+    }
+  }).component("TabUser", {
+    template: `<h3>tab user</h3>`,
+    mounted() {
+      console.log("app1 tab user");
+    }
+  }).component("TabChart", {
+    template: `<h3>tab chart</h3>`,
+    mounted() {
+      console.log("app1 tab chart");
+    }
+  });
+  app1.mount("#id1");
+
+  let app2 = Vue.createApp({
+    data() {
+      return {
+        tabs: ["home","user","chart"],
+        currentIndex: 0
+      }
+    },
+    computed: {
+      currentComponent() {
+        let tabName = this.tabs[this.currentIndex];
+        return "tab-" + tabName;
+      }
+    }
+  }).component("TabHome", {
+    template: `<h3>tab home</h3>`,
+    mounted() {
+      console.log("app2 tab home");
+    }
+  }).component("TabUser", {
+    template: `<h3>tab user</h3>`,
+    mounted() {
+      console.log("app2 tab user");
+    }
+  }).component("TabChart", {
+    template: `<h3>tab chart</h3>`,
+    mounted() {
+      console.log("app2 tab chart");
+    }
+  });
+  app2.mount("#id2");
+
+  let AsyncButton = Vue.defineAsyncComponent(() => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          template: `<button>按钮</button>`
+        })
+      }, 10000)
+    })
+  })
+  let app3 = Vue.createApp({
+    components: { AsyncButton }
+  });
+  app3.mount("#id3");
+</script>
+</body>
+</html>

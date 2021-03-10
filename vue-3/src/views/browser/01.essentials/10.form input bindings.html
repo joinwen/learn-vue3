@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://unpkg.com/vue@next"></script>
+  <title>表单输入绑定</title>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>基础用法：</h2>
+    <div id="id1">
+      <section>
+        <span>文本：[{{ textValue }}]</span>
+        <input type="text" v-model="textValue">
+      </section>
+
+      <section>
+        <span>多行文本：[{{ textareaValue }}]</span>
+        <input type="text" v-model="textareaValue">
+      </section>
+
+      <section>
+        <span>复选框：[{{ checkboxValue + ":" + checkboxValue2 }}]</span>
+        <input type="checkbox" value="jack" v-model="checkboxValue">
+
+        <input type="checkbox" value="marry" v-model="checkboxValue2">
+      </section>
+
+      <section>
+        <span>单选框：[ {{ radioValue }} ]</span>
+        <input type="radio" v-model="radioValue">
+      </section>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <h2>值绑定：</h2>
+    <div id="id2">
+
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <h2>修饰符：</h2>
+    <div id="id3">
+
+    </div>
+  </div>
+
+  <script>
+    let app1 = Vue.createApp({
+      data() {
+        return {
+          textValue: undefined,
+          textareaValue: undefined,
+          checkboxValue: undefined,
+          checkboxValue2: [],
+          radioValue: undefined,
+          selectValue: undefined
+        }
+      }
+    });
+    app1.mount("#id1");
+  </script>
+</body>
+</html>

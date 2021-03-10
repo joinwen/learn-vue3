@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Provide / Inject</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+    .wrapper {
+      padding: 1em;
+      margin: 1em;
+      border: 1px dashed yellowgreen;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>传递字面量：</h2>
+  <div id="id1">
+    <base-button></base-button>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>传递组件实例 property：</h2>
+  <div id="id2">
+    <base-button></base-button>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>处理响应式：</h2>
+  <div id="id3">
+    <base-button></base-button>
+  </div>
+</div>
+<script>
+  let app1 = Vue.createApp({
+    provide: {
+      locale: "zh-CN"
+    }
+  }).component("BaseButton",{
+    template: `<button>{{ locale }}</button>`,
+    mounted() {
+      console.log(this.$attrs);
+    },
+    inject: ["locale"]
+  });
+  app1.mount("#id1");
+
+  let app2 = Vue.createApp({
+    data() {
+      return {
+        news: ["a","b","c"]
+      }
+    },
+    provide() {
+      return  {
+        locale: this.news.length
+      }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.news.push("d")
+      }, 5000)
+    }
+  }).component("BaseButton",{
+    inject: ["locale"],
+    template: `<button>{{ locale }}</button>`
+  });
+  app2.mount("#id2");
+
+  let app3 = Vue.createApp({
+    data() {
+      return {
+        news: ["a","b","c"]
+      }
+    },
+    provide() {
+      return  {
+        // locale: Vue.computed(() => this.news.length)
+        locale: Vue.ref(this.news.length)
+      }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.news.push("d")
+      }, 5000)
+    }
+  }).component("BaseButton",{
+    inject: ["locale"],
+    template: `<button>{{ locale.value }}</button>`
+  });
+  app3.mount("#id3");
+</script>
+</body>
+</html>

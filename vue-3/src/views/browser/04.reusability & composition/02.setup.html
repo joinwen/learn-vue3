@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+  <title>Setup</title>
+</head>
+<body>
+<div class="wrapper">
+  <h2>参数：</h2>
+  <div id="id1">
+    <base-section wen="fly" :button-name="label">
+      <template v-slot:default>
+        默认插槽
+      </template>
+    </base-section>
+  </div>
+</div>
+<script>
+  let app1 = Vue.createApp({
+    data() {
+      return {
+        label: "超级按钮"
+      }
+    }
+  }).component("BaseSection", {
+    props: ["buttonName"],
+    template: `<button>按钮<slot>默认插槽</slot></button>`,
+    setup(props, {attrs,emit,slots}) {
+      console.log(props.buttonName, attrs,emit,slots);
+    }
+  });
+  app1.mount("#id1");
+</script>
+</body>
+</html>

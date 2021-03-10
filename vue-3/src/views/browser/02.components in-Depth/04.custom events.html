@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义事件</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+    .wrapper {
+      padding: 1em;
+      margin: 1em;
+      border: 1px dashed yellowgreen;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>事件名：</h2>
+  <div id="id1">
+    <base-input @focus="handleFocus"></base-input>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>定义自定义事件：</h2>
+  <div id="id2">
+    <base-input @click="handleClick"></base-input>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>v-model参数：</h2>
+  <div id="id3">
+    {{myTitle}}
+    <base-input v-model:title="myTitle"></base-input>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>多个v-model绑定：</h2>
+  <div id="id4">
+    {{ myTitle1 }}
+    <base-input1 v-model:title1="myTitle1"></base-input1>
+    {{ myTitle2 }}
+    <base-input2 v-model:title2="myTitle2"></base-input2>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>model修饰符：</h2>
+  <div id="id5">
+    <base-input v-model:title.captilize="myTitle"></base-input>
+  </div>
+</div>
+
+<script>
+  let app1 = Vue.createApp({
+    methods: {
+      handleFocus(e) {
+        console.log(e);
+      }
+    }
+  }).component("BaseInput",{
+    template: `<input type="text" @focus="handleFocus">`,
+    methods: {
+      handleFocus(e) {
+        this.$emit("focus", e);
+      }
+    }
+  });
+  app1.mount("#id1");
+
+  let app2 = Vue.createApp({
+    data() {
+      return {
+        name: "app2"
+      }
+    },
+    methods: {
+      handleClick(e) {
+        console.log(e, this.name);
+      }
+    }
+  }).component("BaseInput",{
+    template: `<button type="text" @click="handleClick">按钮</button>`,
+    emits: ["click"],
+    data() {
+      return {
+        name: "base-input"
+      }
+    },
+    methods: {
+      handleClick(e) {
+        this.$emit("click", "age");
+      }
+    },
+    mounted() {
+      console.log(this.$attrs);
+    }
+  });
+  app2.mount("#id2");
+
+  let app3 = Vue.createApp({
+    data() {
+      return {
+        myTitle: "my title"
+      }
+    }
+  }).component("BaseInput",{
+    props: ["title"],
+    template: `<input type="text" :value="title" @input="$emit('update:title',$event.target.value)" />`,
+  });
+  app3.mount("#id3");
+
+  let app4 = Vue.createApp({
+    data() {
+      return {
+        myTitle1: "my title 1",
+        myTitle2: "my title 2"
+      }
+    }
+  }).component("BaseInput1", {
+    props: ["title1"],
+    emits: ["update:title1"],
+    template: `<input :value="title1" @input="$emit('update:title1',$event.target.value)" />`,
+    mounted() {
+      console.log(this.$attrs);
+    }
+  }).component("BaseInput2", {
+    props: ["title2"],
+    emits: ["update:title2"],
+    template: `<input :value="title2" @input="$emit('update:title2', $event.target.value)" />`,
+    mounted() {
+      console.log(this.$attrs);
+    }
+  });
+  app4.mount("#id4");
+
+  let app5 = Vue.createApp({
+    data() {
+      return {
+        myTitle: "my title"
+      }
+    }
+  }).component("BaseInput", {
+    props: ["title","titleModifiers"],
+    emits: ["update:title"],
+    template: `<input :value="title" @input="handleInput" />`,
+    methods: {
+      handleInput(e) {
+        let value = e.target.value;
+        if(this.titleModifiers) {
+          value = value.toUpperCase();
+        };
+        this.$emit("update:title", value);
+      }
+    }
+  });
+  app5.mount("#id5");
+</script>
+
+</body>
+</html>

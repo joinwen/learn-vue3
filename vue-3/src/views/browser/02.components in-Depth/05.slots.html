@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>插槽</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+    .wrapper {
+      padding: 1em;
+      margin: 1em;
+      border: 1px dashed yellowgreen;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>插槽内容：</h2>
+  <div id="id1">
+    <base-header>
+      我是默认 Slot 内容
+    </base-header>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>插槽内容：</h2>
+  <div id="id2">
+    <base-header>
+      我是默认 Slot 内容 {{ name }}
+    </base-header>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>备用内容：</h2>
+  <div id="id3">
+    <base-header>
+    </base-header>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>具名插槽：</h2>
+  <div id="id4">
+    <base-section>
+      <template v-slot:header>
+        header
+      </template>
+      <template v-slot:content>
+        content
+      </template>
+      <template v-slot:footer>
+        footer
+      </template>
+    </base-section>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>作用域插槽：</h2>
+  <div id="id5">
+    <base-section>
+      <template v-slot:header="{ item, index }">
+        <button>{{ item.name + index }}</button>
+      </template>
+    </base-section>
+  </div>
+</div>
+
+<script>
+  let app1 = Vue.createApp({
+  }).component("BaseHeader",{
+    template: `<div>
+      <h6>默认插槽内容</h6>
+      <slot></slot>
+    </div>`
+  });
+  app1.mount("#id1");
+
+  let app2 = Vue.createApp({
+    data() {
+      return {
+        name: "app2"
+      }
+    }
+  }).component("BaseHeader",{
+    template: `<div>
+      <h6>默认插槽内容</h6>
+      <slot></slot>
+    </div>`
+  });
+  app2.mount("#id2");
+
+  let app3 = Vue.createApp({
+    data() {
+      return {
+        name: "app3"
+      }
+    }
+  }).component("BaseHeader",{
+    template: `<div>
+      <h6>默认插槽内容</h6>
+      <slot>
+        备用内容
+      </slot>
+    </div>`
+  });
+  app3.mount("#id3");
+
+
+  let app4 = Vue.createApp({
+  }).component("BaseSection", {
+    template: `<div>
+      <section>
+        <h6>头部</h6>
+        <slot name="header"></slot>
+      </section>
+      <section>
+        <h6>内容</h6>
+        <slot name="content"></slot>
+      </section>
+      <section>
+        <h6>尾部</h6>
+        <slot name="footer"></slot>
+      </section>
+    </div>`
+  })
+  app4.mount("#id4");
+
+
+  let app5 = Vue.createApp({
+  }).component("BaseSection",{
+    template: `
+    <div>
+      <section>
+        <h6>头部</h6>
+        <slot name="header" :item="{name: 'flywen'}" :index="100"></slot>
+      </section>
+    </div>
+    `
+  })
+  app5.mount("#id5");
+
+</script>
+</body>
+</html>
