@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>模板引用</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>测试setup 能否合并：不能</h2>
+    <div id="id1">
+      <button>{{ count }}</button>
+      <h6>{{ user.name }}</h6>
+      <h6>{{ user.age }}</h6>
+      <h6>{{ globalName }}</h6>
+    </div>
+  </div>
+  <script>
+    let mixin1 = {
+      setup() {
+        let count = Vue.ref(0);
+        return {
+          count
+        }
+      },
+      data() {
+        return {
+          globalName: "flywen.top"
+        }
+      }
+    }
+    let app1 = Vue.createApp({
+      mixins: [ mixin1 ],
+      setup() {
+        let user = Vue.reactive({
+          name: "flywen",
+          age: 22
+        });
+        return {
+          user
+        }
+      }
+    });
+    app1.mount("#id1");
+  </script>
+</body>
+</html>

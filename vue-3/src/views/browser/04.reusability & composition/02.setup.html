@@ -26,6 +26,37 @@
     </base-section>
   </div>
 </div>
+
+<div class="wrapper">
+  <h2>访问 property：</h2>
+  <div id="id2">
+    执行 setup时，组件实例尚未被创建。因此，只能访问一下 property
+    <li>props</li>
+    <li>attrs</li>
+    <li>
+      slots
+    </li>
+    <li>
+      emit
+    </li>
+    换句话，无法访问以下：
+    <li>data</li>
+    <li>computed</li>
+    <li>methods</li>
+  </div>
+</div>
+<div class="wrapper">
+  <h2>结合模板使用：</h2>
+  <div id="id3">
+    <base-section></base-section>
+  </div>
+</div>
+
+<div class="wrapper">
+  <h2>使用渲染函数：</h2>
+  <div id="id4">
+  </div>
+</div>
 <script>
   let app1 = Vue.createApp({
     data() {
@@ -41,6 +72,33 @@
     }
   });
   app1.mount("#id1");
+
+  let app3 = Vue.createApp({
+    data() {
+      return {
+        name: "app3"
+      }
+    }
+  }).component("BaseSection", {
+    setup(props) {
+      let count = Vue.ref(0);
+      return {
+        count
+      }
+    },
+    template: `<button @click="count++">{{ count }}</button>`
+  });
+  app3.mount("#id3");
+
+
+  let app4 = Vue.createApp({
+    setup() {
+      const redersNumber = Vue.ref(0);
+      const book = Vue.reactive({title: "Vue 3 Guide"});
+      return () => Vue.h("div",[redersNumber.value, book.title]);
+    }
+  });
+  app4.mount("#id4");
 </script>
 </body>
 </html>

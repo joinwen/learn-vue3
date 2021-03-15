@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>自定义指令</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>自定义指令：</h2>
+    <div id="id1">
+
+    </div>
+  </div>
+  <script>
+    let app = Vue.createApp({
+      template: `<button v-color="count" @click="count += 3">{{ count }}</button>`,
+      data() {
+        return {
+          count: 0
+        }
+      }
+    }).directive("color",{
+      mounted: (el, binding) => {
+        el.style.backgroundColor = `rgb(255,255,${binding.value})`;
+      },
+      updated: (el, binding) => {
+        el.style.backgroundColor = `rgb(${binding.value - 30},${binding.value - 20},${binding.value})`;
+      }
+    });
+    app.mount("#id1");
+  </script>
+</body>
+</html>

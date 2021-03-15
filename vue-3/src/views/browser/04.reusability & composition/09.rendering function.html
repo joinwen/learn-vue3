@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>渲染函数</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>渲染函数：</h2>
+    <div id="id1">
+      <level-header :level="4">
+        标题4
+      </level-header>
+      <level-header :level="5">
+        标题5
+      </level-header>
+      <level-header :level="6">
+        标题6
+      </level-header>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <h2></h2>
+  </div>
+  <script>
+    let app1 = Vue.createApp({
+    }).component("LevelHeader", {
+      props: ["level"],
+      render() {
+        return Vue.h(
+          "h" + this.level,
+          {},
+          this.$slots.default()
+        )
+      }
+    });
+    app1.mount("#id1");
+  </script>
+</body>
+</html>

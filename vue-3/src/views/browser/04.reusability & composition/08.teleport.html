@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>teleport</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+    .modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgb(0,0,0,.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-control {
+      width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>teleport: </h2>
+  <div id="id1">
+
+  </div>
+</div>
+<script>
+  let app1 = Vue.createApp({
+    data() {
+      return {
+        visible: false
+      }
+    },
+    template: `<div>
+      <button @click="visible = !visible">按钮</button>
+      <teleport to="body">
+        <div v-if="visible" class="modal">
+          <div class="modal-control">
+            <button @click="visible = false">close</button>
+          </div>
+        </div>
+      </teleport>
+    </div>`
+  });
+  app1.mount("#id1");
+</script>
+</body>
+</html>

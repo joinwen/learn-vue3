@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Provide / Inject</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h2>基础使用：</h2>
+  <div id="id1">
+    <base-section>
+    </base-section>
+  </div>
+
+</div>
+
+<div class="wrapper">
+  <h2>响应式：</h2>
+  <div id="id2">
+    <base-section>
+    </base-section>
+  </div>
+</div>
+
+<script>
+  let app1 = Vue.createApp({
+    setup() {
+      Vue.provide("location","上海");
+      Vue.provide("geolocation",[38, 120]);
+    }
+  }).component("BaseSection", {
+    template: `<button>{{location + geolocation }}</button>`,
+    setup() {
+      let location = Vue.inject("location");
+      let geolocation = Vue.inject("geolocation");
+      return {
+        location,
+        geolocation
+      }
+    }
+  });
+  app1.mount("#id1");
+
+
+  let app2 = Vue.createApp({
+    setup() {
+      let location = Vue.ref("上海");
+      let geolocation = Vue.ref([38, 120]);
+      Vue.provide("location", location);
+      Vue.provide("geolocation", geolocation);
+      Vue.provide("add", () => geolocation.value[0]++);
+    }
+  }).component("BaseSection", {
+    template: `<button @click="add">{{location + geolocation }}</button>`,
+    setup() {
+      let location = Vue.inject("location");
+      let geolocation = Vue.inject("geolocation");
+      let add = Vue.inject("add");
+      return {
+        location,
+        geolocation,
+        add
+      }
+    }
+  });
+  app2.mount("#id2");
+</script>
+</body>
+</html>

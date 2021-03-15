@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>生命周期钩子</title>
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .wrapper {
+      border: 1px dashed yellowgreen;
+      padding: 1em;
+      margin: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>生命周期钩子：</h2>
+    <div id="id1">
+
+    </div>
+  </div>
+  <script>
+    let app = Vue.createApp({
+      template: `<button @click="wait5">{{ count }}</button>`,
+      setup() {
+        Vue.onBeforeMount(() => {
+          console.log("1. before mount");
+        })
+        Vue.onMounted(() => {
+          console.log("2. mounted");
+        })
+        Vue.onBeforeUpdate(() => {
+          console.log("3. before update");
+        })
+        Vue.onUpdated(() => {
+          console.log("4. updated");
+        })
+        Vue.onBeforeUnmount(() => {
+          console.log("5. before unmount");
+        })
+        Vue.onUnmounted(() => {
+          console.log("6. unmounted");
+        })
+        Vue.onErrorCaptured(() => {
+          console.log("7. error captured");
+        })
+        Vue.onRenderTracked(() => {
+          console.log("8. render tracked");
+        })
+        Vue.onRenderTriggered(() => {
+          console.log("9. render triggered");
+        })
+        let count = Vue.ref(0);
+        const wait5 = () => {
+          setTimeout(() => {
+            count.value ++;
+          }, 5000);
+        }
+        return {
+          count,
+          wait5
+        }
+      }
+    })
+    app.mount("#id1");
+  </script>
+</body>
+</html>
